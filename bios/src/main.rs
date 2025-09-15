@@ -1211,7 +1211,7 @@ fn render_main_menu(
 
     // Draw logo and version number
     draw_texture(logo, (SCREEN_WIDTH as f32 - 420.0)/2.0, 30.0, WHITE);
-    text(&ctx, "V1.0", SCREEN_WIDTH as f32 - 50.0, SCREEN_HEIGHT as f32 - 20.0);
+    text(&ctx, "V1.0", SCREEN_WIDTH as f32 - 70.0, SCREEN_HEIGHT as f32 - 20.0);
 }
 
 #[macroquad::main(window_conf)]
