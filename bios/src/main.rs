@@ -31,6 +31,7 @@ struct SoundEffects {
     select: audio::Sound,
     reject: audio::Sound,
     back: audio::Sound,
+    menu_music: audio::Sound,
 }
 
 impl SoundEffects {
@@ -40,27 +41,39 @@ impl SoundEffects {
             select: audio::load_sound_from_bytes(include_bytes!("../select.wav")).await.unwrap(),
             reject: audio::load_sound_from_bytes(include_bytes!("../reject.wav")).await.unwrap(),
             back: audio::load_sound_from_bytes(include_bytes!("../back.wav")).await.unwrap(),
+            menu_music: audio::load_sound_from_bytes(include_bytes!("../main_menu.wav")).await.unwrap(),
         }
+    }
+
+    fn play_menu_music(&self) {
+        audio::play_sound(&self.menu_music, audio::PlaySoundParams {
+            looped: true,  // loops
+            volume: 0.3,   // volume
+        });
+    }
+
+    fn stop_menu_music(&self) {
+        audio::stop_sound(&self.menu_music);
     }
 
     fn play_cursor_move(&self) {
         audio::play_sound(&self.cursor_move, audio::PlaySoundParams {
             looped: false,
-            volume: 0.25,
+            volume: 0.5,
         });
     }
 
     fn play_select(&self) {
         audio::play_sound(&self.select, audio::PlaySoundParams {
             looped: false,
-            volume: 0.75,
+            volume: 0.5,
         });
     }
 
     fn play_reject(&self) {
         audio::play_sound(&self.reject, audio::PlaySoundParams {
             looped: false,
-            volume: 0.75,
+            volume: 0.5,
         });
     }
 
@@ -1197,8 +1210,8 @@ fn render_main_menu(
     }
 
     // Draw logo and version number
-    draw_texture(logo, (SCREEN_WIDTH as f32 - 166.0)/2.0, 30.0, WHITE);
-    text(&ctx, "V2025.0", SCREEN_WIDTH as f32 - 90.0, SCREEN_HEIGHT as f32 - 20.0);
+    draw_texture(logo, (SCREEN_WIDTH as f32 - 420.0)/2.0, 30.0, WHITE);
+    text(&ctx, "V1.0", SCREEN_WIDTH as f32 - 50.0, SCREEN_HEIGHT as f32 - 20.0);
 }
 
 #[macroquad::main(window_conf)]
@@ -1221,6 +1234,7 @@ async fn main() {
 
     // Initialize sound effects
     let sound_effects = SoundEffects::new().await;
+    sound_effects.play_menu_music();
 
     // Initialize gamepad support
     let mut gilrs = Gilrs::new().unwrap();
